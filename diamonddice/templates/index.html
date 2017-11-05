@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+<!-- {% load static %} -->
+
+    <link rel="stylesheet" link href="static/css/styles.css" type ="text/css">
+
+  </head>
+
+  <body>
+
+
+  <div class = "grid">
+
+    <div class="title">
+
+     <h1>
+       Diamond Dice
+     </h1>
+
+
+    </div>
+
+    <div class ="score" id ="score">
+
+     Here Score
+
+
+    </div>
+
+        <div class ="message" id ="message">
+
+     <p></p>
+
+
+    </div>
+
+     <div class ="dice">
+         <div class ="dice-1">
+            <div class="card">
+
+                    <p id ="card1">1</p>
+
+
+
+          </div>
+        </div>
+
+        <div class ="dice-2">
+           <div class="card" id ="card2" >
+
+                    <p>2</p>
+
+          </div>
+        </div>
+
+         <div class ="dice-3">
+           <div class="card" id ="card3" >
+
+                    <p>3</p>
+
+          </div>
+
+
+        </div>
+
+        <div class ="dice-4">
+           <div class="card" id ="card4" >
+
+                    <p>4</p>
+
+          </div>
+        </div>
+
+         <div class ="dice-5">
+           <div class="card" id ="card5" >
+
+                    <p>5</p>
+
+          </div>
+
+        </div>
+
+
+      </div>
+
+
+       <div class ="roll">
+
+
+          <div class="round-button" id="roll-button"><div class="round-button-circle"><a class="round-button">Roll Dice</a></div></div>
+
+      </div>
+
+       <div class ="save">
+
+          <div class="round-button" id="save-button"><div class="round-button-circle"><a class="round-button">Save</a></div></div>
+
+
+      </div>
+
+
+
+   </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+
+    <script>
+
+
+                $(function() {
+
+                    $('#roll-button').click(function() {
+
+                      $.get("/roll/",  function(data) {
+                        console.log(data)
+                        console.log("dice rolled!");
+                        document.getElementById("card1").innerHTML = data.dice_value1
+                        document.getElementById("card2").innerHTML = data.dice_value2
+                        document.getElementById("card3").innerHTML = data.dice_value3
+                        document.getElementById("card4").innerHTML = data.dice_value4
+                        document.getElementById("card5").innerHTML = data.dice_value5
+                        document.getElementById("message").innerHTML = data.dice_status1
+                        document.getElementById("score").innerHTML = data.dice_score;
+                      });
+                    });
+                });
+
+                $(function() {
+
+                    $('#save-button').click(function() {
+
+                        $.ajax({
+                        url: "/save/",
+                        type: 'DELETE',
+                        success: function(result) {
+
+                            console.log("data deleted!");
+
+                            }
+                        });
+                      });
+                    });
+
+
+
+    </script>
+
+
+  </body>
+
+</html>
+
+
+
+
