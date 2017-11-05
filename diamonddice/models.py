@@ -2,24 +2,6 @@ from django.db import models
 from random import randint
 
 
-#class Diceroll(models.Manager):
-    #def roll_dice(self):
-
-        #if Dicehand.objects.filter(dice_status1="unlocked").last(): d1 = randint(1,6)
-        #if Dicehand.objects.filter(dice_status2="unlocked").last(): d2 = randint(1,6)
-        #if Dicehand.objects.filter(dice_status3="unlocked").last(): d3 = randint(1,6)
-        #if Dicehand.objects.filter(dice_status4="unlocked").last(): d4 = randint(1,6)
-        #if Dicehand.objects.filter(dice_status5="unlocked").last(): d5 = randint(1,6)
-
-
-
-
-
-
-
-
-
-
 
 class Dicehand(models.Model):
     dice_score = models.IntegerField(default = 0)
@@ -63,4 +45,8 @@ class Dicehand(models.Model):
         score += self._score_die(self.dice_value3)
         score += self._score_die(self.dice_value4)
         score += self._score_die(self.dice_value5)
-        return score
+        self.dice_score = score
+
+    def save(self, *args, **kwargs):
+        self.score()
+        super(Dicehand, self).save(*args, **kwargs)

@@ -34,7 +34,6 @@ def roll_dice():
         new_hand = Dicehand()
 
     new_hand.roll()
-    new_hand.dice_score = new_hand.score()
     new_hand.save()
 
     return new_hand
