@@ -1,12 +1,16 @@
 from rest_framework import serializers
-from diamonddice.models import Dicehand
+from diamonddice.models import Dicehand, Dice
 
-class DicehandSerializer(serializers.ModelSerializer):
+
+class DiceSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Dicehand
+        model = Dice
         fields = '__all__'
 
-class SavehandSerializer(serializers.ModelSerializer):
+class DicehandSerializer(serializers.ModelSerializer):
+    dice = DiceSerializer(many=True, read_only=True)
+
     class Meta:
         model = Dicehand
-        fields = 'display_message'
+        fields = ('dice_score', 'display_message', 'dice')
+

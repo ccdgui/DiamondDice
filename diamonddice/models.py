@@ -1,52 +1,48 @@
 from django.db import models
 from random import randint
 
-
-
 class Dicehand(models.Model):
     dice_score = models.IntegerField(default = 0)
-    dice_value1 = models.IntegerField(default = 0)
-    dice_status1 = models.CharField(max_length=30, default="unlocked")
-    dice_value2 = models.IntegerField(default = 0)
-    dice_status2 = models.CharField(max_length=30, default="unlocked")
-    dice_value3 = models.IntegerField(default = 0)
-    dice_status3 = models.CharField(max_length=30, default="unlocked")
-    dice_value4 = models.IntegerField(default = 0)
-    dice_status4 = models.CharField(max_length=30, default="unlocked")
-    dice_value5 = models.IntegerField(default = 0)
-    dice_status5 = models.CharField(max_length=30, default="unlocked")
     display_message = models.CharField(max_length=140, default="It worked!")
     created_at = models.DateTimeField(auto_now_add=True)
 
     def roll(self):
-        if self.dice_status1 == 'unlocked':
-            self.dice_value1 = randint(1,6)
-        if self.dice_status2 == 'unlocked':
-            self.dice_value2 = randint(1,6)
-        if self.dice_status3 == 'unlocked':
-            self.dice_value3 = randint(1,6)
-        if self.dice_status4 == 'unlocked':
-            self.dice_value4 = randint(1,6)
-        if self.dice_status5 == 'unlocked':
-            self.dice_value5 = randint(1,6)
 
-    def _score_die(self, value):
-        score = 0
-        if value == 1:
-            score = 100
-        elif value == 5:
-            score = 50
-        return score
+        dice = self.dice.all()
+        if dice.exists():  # Assuming that if any dice exist, there are 5
+            for die in dice:
+                if die.dice_status == "unlocked":
+                    die.dice_value = randint(1,6)
+                    die.save()
+        else:
+            for i in range(5):
+                Dice.objects.create(dicehand=self, dice_value=randint(1,6))
 
     def score(self):
-        score = 0
-        score += self._score_die(self.dice_value1)
-        score += self._score_die(self.dice_value2)
-        score += self._score_die(self.dice_value3)
-        score += self._score_die(self.dice_value4)
-        score += self._score_die(self.dice_value5)
+        score = 100
         self.dice_score = score
 
     def save(self, *args, **kwargs):
         self.score()
         super(Dicehand, self).save(*args, **kwargs)
+
+
+class Dice(models.Model):
+    dice_value = models.IntegerField(default = 0)
+    dice_status = models.CharField(max_length=30, default="unlocked")
+    created_at = models.DateTimeField(auto_now_add=True)
+    dicehand = models.ForeignKey(Dicehand, related_name='dice', on_delete=models.CASCADE)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
