@@ -122,12 +122,12 @@
                       $.get("/roll/",  function(data) {
                         console.log(data)
                         console.log("dice rolled!");
-                        document.getElementById("card1").innerHTML = data.dice_value1
-                        document.getElementById("card2").innerHTML = data.dice_value2
-                        document.getElementById("card3").innerHTML = data.dice_value3
-                        document.getElementById("card4").innerHTML = data.dice_value4
-                        document.getElementById("card5").innerHTML = data.dice_value5
-                        document.getElementById("message").innerHTML = data.dice_status1
+                        document.getElementById("card1").innerHTML = data.dice[0].dice_value
+                        document.getElementById("card2").innerHTML = data.dice[1].dice_value
+                        document.getElementById("card3").innerHTML = data.dice[2].dice_value
+                        document.getElementById("card4").innerHTML = data.dice[3].dice_value
+                        document.getElementById("card5").innerHTML = data.dice[4].dice_value
+                        document.getElementById("message").innerHTML = data.display_message
                         document.getElementById("score").innerHTML = data.dice_score;
                       });
                     });
