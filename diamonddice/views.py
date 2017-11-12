@@ -2,11 +2,11 @@
 from diamonddice.gamelogic.roll_dice import roll_dice
 
 #django import statements
-from .models import Dicehand
+from .models import Dice
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.views.generic import TemplateView
-from .serializers import DicehandSerializer
+from .serializers import DiceSerializer
 
 
 class DiamondView(TemplateView):
@@ -17,7 +17,7 @@ class RollView(APIView):
     def get(self, request, format=None):
 
         new_hand = roll_dice()
-        serializer = DicehandSerializer(new_hand)
+        serializer = DiceSerializer(new_hand)
 
         return Response(serializer.data)
 

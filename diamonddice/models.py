@@ -2,67 +2,75 @@ from django.db import models
 from random import randint
 from django.db.models import Count
 
-
-class Dicehand(models.Model):
+class Dice(models.Model):
     dice_score = models.IntegerField(default = 0)
-    display_message = models.CharField(max_length=140, default="It worked!")
+    hand_name = models.CharField(max_length=140, default="No Hand")
+    display_message = models.CharField(max_length=140, default="Let's roll!")
     created_at = models.DateTimeField(auto_now_add=True)
 
-    def roll(self):
+    def __str__(self):
+        return '%s %s %s' % (self.dice_score, self.hand_name, self.display_message)
 
-        dice = self.dice.all()
-        if dice.exists():  # Assuming that if any dice exist, there are 5
-            for die in dice:
-                if die.dice_status == "unlocked":
-                    die.dice_value = randint(1,6)
-                    die.save()
+
+    class Meta:
+        ordering = ('created_at',)
+
+    def roll_score(self, existing_dice):
+
+        if len(existing_dice) > 0:  # Assuming that if any dice exist, there are 5
+
+            for die in existing_dice:
+
+                new_die = Die(hand=self, die_value=die.die_value, die_status=die.die_status)
+
+                if new_die.die_status == "unlocked":
+                    new_die.die_value = randint(1,6)
+
+                new_die.save()
+
         else:
+
             for i in range(5):
-                Dice.objects.create(dicehand=self, dice_value=randint(1,6))
+                Die.objects.create(hand=self, die_value=randint(1,6))
 
-    def score(self):
-        score = 0
-        unlocked_dice = self.dice.filter(dice_status="unlocked")
 
-        dice_count = unlocked_dice.values('dice_value').annotate(Count('dice_value'))
 
-        if dice_count[0]['dice_value__count'] == 2:
-            score += dice_count[0]['dice_value'] * 10000
-            for die in unlocked_dice:
-                if die.dice_value == dice_count[0]:
-                    die.dice_status == 'scored'
+        score = self.dice_score
 
-        if dice_count[0]['dice_value__count'] == 3:
-            score += dice_count[0]['dice_value'] * 100
-            for die in unlocked_dice:
-                if die.dice_value == dice_count[0]:
-                    die.dice_status == 'scored'
+        unlocked_dice = self.dice.filter(die_status="unlocked")
 
-        if dice_count[0]['dice_value__count'] == 4:
-            score += dice_count[0]['dice_value'] * 1000
-            for die in unlocked_dice:
-                if die.dice_value == dice_count[0]:
-                    die.dice_status == 'scored'
+        dice_count = unlocked_dice.values('die_value').order_by('die_value').annotate(Count('die_value')).order_by('die_value__count')
 
+        scored_values = []
+        for dice_scored in dice_count:
+            if dice_scored['die_value__count'] == 2:
+                scored_values.append(dice_scored['die_value'])
+                score += dice_scored['die_value'] * 10000
+
+            if dice_scored['die_value__count'] == 3:
+                scored_values.append(dice_scored['die_value'])
+                score += dice_scored['die_value'] * 10000
+
+        unlocked_dice.filter(die_value__in=scored_values).update(die_status='scored')
 
         self.dice_score = score
 
 
-
-class Dice(models.Model):
-    dice_value = models.IntegerField(default = 0)
-    dice_status = models.CharField(max_length=30, default="unlocked")
+class Die(models.Model):
+    die_value = models.IntegerField(default = 0)
+    die_status = models.CharField(max_length=30, default="unlocked")
     created_at = models.DateTimeField(auto_now_add=True)
-    dicehand = models.ForeignKey(Dicehand, related_name='dice', on_delete=models.CASCADE)
+    hand = models.ForeignKey(Dice, related_name='dice')
+
+
+    def __str__(self):
+        return '%s %s' % (self.die_value, self.die_status)
+
+    class Meta:
+        ordering = ('created_at',)
 
 
 
-
-
-
-
-
-
-
-
+#if 0 die is unlocked, player has to roll again
+#if die has scored its status becomes 'scored', if player decides to roll again die status changed from 'score' to 'locked'
 
