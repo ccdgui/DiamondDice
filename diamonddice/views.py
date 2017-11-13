@@ -1,5 +1,5 @@
 #diamonddice game logic
-from diamonddice.gamelogic.roll_dice import roll_dice
+from diamonddice.gamelogic.game_action import roll_dice
 
 #django import statements
 from .models import Dice
@@ -16,7 +16,9 @@ class RollView(APIView):
 
     def get(self, request, format=None):
 
+
         new_hand = roll_dice()
+
         serializer = DiceSerializer(new_hand)
 
         return Response(serializer.data)

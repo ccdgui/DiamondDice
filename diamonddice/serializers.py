@@ -12,5 +12,5 @@ class DiceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Dice
-        fields = ('dice_score', 'hand_name', 'display_message', 'dice')
+        fields = ('dice_score', 'round_score', 'hand_name', 'display_message', 'dice')
 
