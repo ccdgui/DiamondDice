@@ -16,7 +16,6 @@ class RollView(APIView):
 
     def get(self, request, format=None):
 
-
         new_hand = roll_dice()
 
         serializer = DiceSerializer(new_hand)
@@ -27,6 +26,6 @@ class SaveView(APIView):
 
     def delete(self, request, format=None):
 
-        Dicehand.objects.all().delete()
+        Dice.objects.all().delete()
 
         return Response(status=status.HTTP_204_NO_CONTENT)

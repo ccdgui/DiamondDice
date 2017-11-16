@@ -5,8 +5,10 @@ from django.db.models import Count
 class Dice(models.Model):
     dice_score = models.IntegerField(default = 0)
     round_score = models.IntegerField(default = 0)
+    alldice_locked = models.CharField(max_length=3, default="No")
     hand_name = models.CharField(max_length=140, default="No Hand")
-    display_message = models.CharField(max_length=140, default="Let's roll!")
+    display_message = models.CharField(max_length=140, default="start")
+
     token = models.IntegerField(default = 3)
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -44,20 +46,28 @@ class Dice(models.Model):
             this_dice_score += 2000
             scored_values = [dice_scored['die_value'] for dice_scored in dice_count]
             self.hand_name = 'Full House'
+            unlocked_dice.filter(die_value__in=scored_values).update(die_status='scored')
 
         #check for straight
-        elif len(dice_count) == 5 and sum([dice_scored['die_value'] for dice_scored in dice_count]) == 20 or sum([dice_scored['die_value'] for dice_scored in dice_count]) == 15:
+        elif len(dice_count) == 5 and (sum([dice_scored['die_value'] for dice_scored in dice_count]) == 20 or sum([dice_scored['die_value'] for dice_scored in dice_count]) == 15):
             scored_values = [dice_scored['die_value'] for dice_scored in dice_count]
             self.hand_name = 'Straight'
             this_dice_score += 2000
+            unlocked_dice.filter(die_value__in=scored_values).update(die_status='scored')
 
         else:
 
             scored_values = []
             for dice_scored in dice_count:
 
-                    #check for three of a kind
-                    if dice_scored['die_value__count'] == 3:
+                    #check for three of a kind - handling special case of triple 1
+                    if dice_scored['die_value__count'] == 3 and dice_scored['die_value'] ==1 :
+                        scored_values.append(dice_scored['die_value'])
+                        this_dice_score += 300
+                        self.hand_name = 'Three of a kind'
+
+                    #check for three of a kind - all other cases
+                    if dice_scored['die_value__count'] == 3 and dice_scored['die_value'] != 1 :
                         scored_values.append(dice_scored['die_value'])
                         this_dice_score += dice_scored['die_value'] * 100
                         self.hand_name = 'Three of a kind'
@@ -74,19 +84,26 @@ class Dice(models.Model):
                         this_dice_score += dice_scored['die_value'] * 10000
                         self.hand_name = 'Five of a kind'
 
-                    #check single dice with value 1 or 5
-                    if dice_scored['die_value__count'] == 1:
-                        if dice_scored['die_value'] == 1:
-                            scored_values.append(dice_scored['die_value'])
-                            this_dice_score += 100
+            unlocked_dice.filter(die_value__in=scored_values).update(die_status='scored')
 
-                        elif dice_scored['die_value'] == 5:
-                            this_dice_score += 150
-                            scored_values.append(dice_scored['die_value'])
+            for dice_scored in dice_count:
 
-        unlocked_dice.filter(die_value__in=scored_values).update(die_status='scored')
+            #check single dice with value 1 or 5
+                if dice_scored['die_value__count'] < 3 and dice_scored['die_value'] == 1:
+                    scored_values.append(dice_scored['die_value'])
+                    this_dice_score += (100 * dice_scored['die_value__count'])
 
-        this_round_score += this_dice_score
+                elif dice_scored['die_value__count'] < 3 and dice_scored['die_value'] == 5:
+                    scored_values.append(dice_scored['die_value'])
+                    this_dice_score += (50 * dice_scored['die_value__count'])
+
+            unlocked_dice.filter(die_value__in=scored_values).update(die_status='scored')
+
+        if this_dice_score == 0:
+            this_round_score = 0
+        else:
+            this_round_score += this_dice_score
+
         self.dice_score = this_dice_score
         self.round_score = this_round_score
 
