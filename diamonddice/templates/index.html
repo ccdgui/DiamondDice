@@ -33,9 +33,10 @@
       <div class ="gemstone">
 
        <div class="stone" id ="topaz" ></div>
+       <div class="stone" id ="ruby" ></div>
 
       </div>
-      <div class ="token">
+      <div class ="token" id ="token">
         <p>Here token</p>
       </div>
 
@@ -43,7 +44,7 @@
          <div class ="dice-1">
            <div class="card" id ="card1" >
 
-            1
+            0
 
           </div>
         </div>
@@ -51,7 +52,7 @@
         <div class ="dice-2">
            <div class="card" id ="card2" >
 
-            2
+            0
 
           </div>
         </div>
@@ -59,7 +60,7 @@
          <div class ="dice-3">
            <div class="card" id ="card3" >
 
-            3
+            0
 
           </div>
 
@@ -69,7 +70,7 @@
         <div class ="dice-4">
            <div class="card" id ="card4" >
 
-            4
+            0
 
           </div>
         </div>
@@ -77,7 +78,7 @@
          <div class ="dice-5">
            <div class="card" id ="card5" >
 
-            5
+            0
 
           </div>
 
@@ -93,7 +94,7 @@
 
       </div>
 
-        <div class ="save">
+        <div class ="save" id ="save-button">
 
           <a  hre="#">Save </a>
 
@@ -115,8 +116,6 @@
                     $('#roll-button').click(function() {
 
                       $.get("/roll/",  function(data) {
-                        console.log(data)
-                        console.log("dice rolled!");
                         document.getElementById("card1").innerHTML = data.dice[0].die_value
                         document.getElementById("card2").innerHTML = data.dice[1].die_value
                         document.getElementById("card3").innerHTML = data.dice[2].die_value
@@ -125,6 +124,8 @@
                         document.getElementById("message").innerHTML = data.display_message
                         document.getElementById("score").innerHTML = data.dice_score
                         document.getElementById("round_score").innerHTML = data.round_score
+                        document.getElementById("token").innerHTML = data.player_score
+                        document.getElementById("ruby").innerHTML = data.token
                         document.getElementById("topaz").innerHTML = data.hand_name;
                       });
                     });
@@ -145,6 +146,55 @@
                         });
                       });
                     });
+
+
+                $(function() {
+
+                    $('#save-button').click(function() {
+
+                      $.get("/save/",  function(data) {
+                        document.getElementById("card1").innerHTML = data.dice[0].die_value
+                        document.getElementById("card2").innerHTML = data.dice[1].die_value
+                        document.getElementById("card3").innerHTML = data.dice[2].die_value
+                        document.getElementById("card4").innerHTML = data.dice[3].die_value
+                        document.getElementById("card5").innerHTML = data.dice[4].die_value
+                        document.getElementById("message").innerHTML = data.display_message
+                        document.getElementById("score").innerHTML = data.dice_score
+                        document.getElementById("round_score").innerHTML = data.round_score
+                        document.getElementById("token").innerHTML = data.player_score
+                        document.getElementById("ruby").innerHTML = data.token
+                        document.getElementById("topaz").innerHTML = data.hand_name;
+                      });
+                    });
+                });
+
+                $(function() {
+
+                    $('#save-button').click(function() {
+
+                        $.ajax({
+                        url: "/save/",
+                        type: 'DELETE',
+                        success: function(result) {
+
+                            console.log("data deleted!");
+
+                            }
+                        });
+                      });
+                    });
+
+
+
+
+
+
+
+
+
+
+
+
     </script>
 
   </body>

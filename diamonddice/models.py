@@ -5,10 +5,10 @@ from django.db.models import Count
 class Dice(models.Model):
     dice_score = models.IntegerField(default = 0)
     round_score = models.IntegerField(default = 0)
+    player_score = models.IntegerField(default = 0)
     alldice_locked = models.CharField(max_length=3, default="No")
     hand_name = models.CharField(max_length=140, default="No Hand")
     display_message = models.CharField(max_length=140, default="start")
-
     token = models.IntegerField(default = 3)
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -106,8 +106,6 @@ class Dice(models.Model):
 
         self.dice_score = this_dice_score
         self.round_score = this_round_score
-
-
 
 class Die(models.Model):
     die_value = models.IntegerField(default = 0)

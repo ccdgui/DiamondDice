@@ -1,13 +1,11 @@
 #diamonddice game logic
-from diamonddice.gamelogic.game_action import roll_dice
+from diamonddice.gamelogic.game_action import roll_dice, save_dice
 
 #django import statements
-from .models import Dice
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.views.generic import TemplateView
 from .serializers import DiceSerializer
-
 
 class DiamondView(TemplateView):
     template_name='index.html'
@@ -24,8 +22,10 @@ class RollView(APIView):
 
 class SaveView(APIView):
 
-    def delete(self, request, format=None):
+    def get(self, request, format=None):
 
-        Dice.objects.all().delete()
+        current_hand = save_dice()
 
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        serializer = DiceSerializer(current_hand)
+
+        return Response(serializer.data)
