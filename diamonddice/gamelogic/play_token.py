@@ -1,7 +1,7 @@
-def play_token(current_hand):
+#given a score, determines how many token can be awarded
+def how_many_token(score):
 
-    score = current_hand.round_score
-    token = -1
+    token = 0
 
     step_one = 200
     step_two = 500
@@ -31,4 +31,20 @@ def play_token(current_hand):
     elif score in range5:
       token += 5
 
+    return token
+
+#when hand is saved, determines how many token are awarded to player:
+def play_token(current_hand):
+
+    score = current_hand.round_score
+    token = how_many_token(score)
     current_hand.token += token
+    current_hand.roll_token = 0
+
+#when hand is rolled, determines how many token could be awarded to player (if hand saved):
+def roll_token(new_hand):
+
+    score = new_hand.round_score
+    token = how_many_token(score)
+    new_hand.roll_token = token
+

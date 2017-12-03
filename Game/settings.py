@@ -136,5 +136,5 @@ STATIC_URL = '/static/'
 # see https://help.pythonanywhere.com/pages/DjangoStaticFiles for more info
 MEDIA_ROOT = u'/home/StrobiHealth/Game/media'
 MEDIA_URL = '/media/'
-STATIC_ROOT = u'/home/StrobiHealth/Game/static'
+STATIC_ROOT = '/home/StrobiHealth/Game/static'
 STATIC_URL = '/static/'

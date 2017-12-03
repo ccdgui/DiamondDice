@@ -3,199 +3,63 @@
 
    <head>
 
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="">
+        <meta name="author" content="">
 
-<!-- {% load static %} -->
-
-    <link rel="stylesheet" link href="static/css/styles.css" type ="text/css">
+        {% load static %}
+        <link rel="stylesheet" link href="static/css/styles.css" type ="text/css">
+        <link rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/animate.css@3.5.2/animate.min.css"
+            integrity="sha384-OHBBOqpYHNsIqQy8hL1U+8OXf9hH6QRxi0+EODezv82DfnZoV7qoHAZDwMwEJvSw"
+            crossorigin="anonymous">
+        <link href="https://fonts.googleapis.com/css?family=Cabin+Sketch"   rel="stylesheet">
 
   </head>
 
   <body>
 
     <div class = "grid">
-       <div class="title">
-         <h3>Diamond Dice</h3>
-       </div>
-      <div class="message" id ="message">
-        <p>Welcome!</p>
-        <p>To start playing, press roll dice.</p>
+       <div class="title">Diamond Dice</div>
+       <div class ="player_score" id ="player_score"><p>Score</p></div>
+       <div class ="gemstone">
+          <div class="topaz" id ="topaz" >Topaz</div>
+          <div class="emerald" id ="emerald" >Emerald</div>
+          <div class="ruby" id ="ruby" >Ruby</div>
+          <div class="sapphire" id ="sapphire" >Sapphire</div>
+          <div class="diamond" id ="diamond" >Diamond</div>
       </div>
-      <div class ="level"id ="score">
-        <p>Level 1</p>
+      <div class="message" id ="message">To start playing, press roll.</div>
+      <div class="round_score" id ="round_score" >Round</div>
+      <div class="token_left" id ="token_left" >Token</div>
+      <div class="roll_score" id ="roll_score" ></div>
+      <div class="special_hand" id ="special_hand" ></div>
+      <div class ="coin" id ="coin">
+          <div class="coin_1" id ="coin_1" >Coin1</div>
+          <div class="coin_2" id ="coin_2" >Coin2</div>
+          <div class="coin_3" id ="coin_3" >Coin3</div>
+          <div class="coin_4" id ="coin_4" >Coin4</div>
+          <div class="coin_5" id ="coin_5" >Coin5</div>
       </div>
-      <div class ="score" id ="round_score">
-      <p>Here Score</p>
+      <div class="token" id ="token">3</div>
+      <div class ="dice">
+          <div class ="dice-1"><div class="card" id ="card1">0</div></div>
+          <div class ="dice-2"><div class="card" id ="card2">0</div></div>
+          <div class ="dice-3"><div class="card" id ="card3">0</div></div>
+          <div class ="dice-4"><div class="card" id ="card4">0</div></div>
+          <div class ="dice-5"><div class="card" id ="card5">0</div></div>
       </div>
-      <div class ="gemstone">
-
-       <div class="stone" id ="topaz" ></div>
-       <div class="stone" id ="ruby" ></div>
-
+      <div class ="roll" id ="roll-button"><a hre="#">Roll</a></div>
+      <div class ="savequit">
+          <div class ="save" id ="save-button"><a  hre="#">Save </a></div>
+          <div class ="quit"><a  hre="#">Quit</a></div>
       </div>
-      <div class ="token" id ="token">
-        <p>Here token</p>
-      </div>
-
-     <div class ="dice">
-         <div class ="dice-1">
-           <div class="card" id ="card1" >
-
-            0
-
-          </div>
-        </div>
-
-        <div class ="dice-2">
-           <div class="card" id ="card2" >
-
-            0
-
-          </div>
-        </div>
-
-         <div class ="dice-3">
-           <div class="card" id ="card3" >
-
-            0
-
-          </div>
-
-
-        </div>
-
-        <div class ="dice-4">
-           <div class="card" id ="card4" >
-
-            0
-
-          </div>
-        </div>
-
-         <div class ="dice-5">
-           <div class="card" id ="card5" >
-
-            0
-
-          </div>
-
-        </div>
-
-
-      </div>
-
-
-       <div class ="roll" id ="roll-button">
-
-          <a hre="#">Roll</a>
-
-      </div>
-
-        <div class ="save" id ="save-button">
-
-          <a  hre="#">Save </a>
-
-      </div>
-
-        <div class ="quit">
-
-          <a  hre="#">Quit </a>
-
-      </div>
-
+    </div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
 
-    <script>
-
-                $(function() {
-
-                    $('#roll-button').click(function() {
-
-                      $.get("/roll/",  function(data) {
-                        document.getElementById("card1").innerHTML = data.dice[0].die_value
-                        document.getElementById("card2").innerHTML = data.dice[1].die_value
-                        document.getElementById("card3").innerHTML = data.dice[2].die_value
-                        document.getElementById("card4").innerHTML = data.dice[3].die_value
-                        document.getElementById("card5").innerHTML = data.dice[4].die_value
-                        document.getElementById("message").innerHTML = data.display_message
-                        document.getElementById("score").innerHTML = data.dice_score
-                        document.getElementById("round_score").innerHTML = data.round_score
-                        document.getElementById("token").innerHTML = data.player_score
-                        document.getElementById("ruby").innerHTML = data.token
-                        document.getElementById("topaz").innerHTML = data.hand_name;
-                      });
-                    });
-                });
-
-                $(function() {
-
-                    $('#save-button').click(function() {
-
-                        $.ajax({
-                        url: "/save/",
-                        type: 'DELETE',
-                        success: function(result) {
-
-                            console.log("data deleted!");
-
-                            }
-                        });
-                      });
-                    });
-
-
-                $(function() {
-
-                    $('#save-button').click(function() {
-
-                      $.get("/save/",  function(data) {
-                        document.getElementById("card1").innerHTML = data.dice[0].die_value
-                        document.getElementById("card2").innerHTML = data.dice[1].die_value
-                        document.getElementById("card3").innerHTML = data.dice[2].die_value
-                        document.getElementById("card4").innerHTML = data.dice[3].die_value
-                        document.getElementById("card5").innerHTML = data.dice[4].die_value
-                        document.getElementById("message").innerHTML = data.display_message
-                        document.getElementById("score").innerHTML = data.dice_score
-                        document.getElementById("round_score").innerHTML = data.round_score
-                        document.getElementById("token").innerHTML = data.player_score
-                        document.getElementById("ruby").innerHTML = data.token
-                        document.getElementById("topaz").innerHTML = data.hand_name;
-                      });
-                    });
-                });
-
-                $(function() {
-
-                    $('#save-button').click(function() {
-
-                        $.ajax({
-                        url: "/save/",
-                        type: 'DELETE',
-                        success: function(result) {
-
-                            console.log("data deleted!");
-
-                            }
-                        });
-                      });
-                    });
-
-
-
-
-
-
-
-
-
-
-
-
-    </script>
+    <script src="{% static 'scripts/main.js' %}"></script>
 
   </body>
 

@@ -2,6 +2,11 @@ from django.db import models
 from random import randint
 from django.db.models import Count
 
+
+# You would have a foreign key here for the player
+# If the Django User has enough info, I would just make player a foreign key to User
+# If you need additional data on players, then make a Player class that has a
+# OneToOneField with User and give Dice a foreign key to Player
 class Dice(models.Model):
     dice_score = models.IntegerField(default = 0)
     round_score = models.IntegerField(default = 0)
@@ -10,7 +15,9 @@ class Dice(models.Model):
     hand_name = models.CharField(max_length=140, default="No Hand")
     display_message = models.CharField(max_length=140, default="start")
     token = models.IntegerField(default = 3)
+    roll_token = models.IntegerField(default = 0)
     created_at = models.DateTimeField(auto_now_add=True)
+    previous_roll_saved = models.CharField(max_length=5, default="No")
 
     def __str__(self):
         return '%s %s %s' % (self.dice_score, self.hand_name, self.display_message)
@@ -19,7 +26,7 @@ class Dice(models.Model):
     class Meta:
         ordering = ('created_at',)
 
-    def roll(self, existing_dice):
+    def roll(self, existing_dice, existing_coins):
 
         if len(existing_dice) > 0:
             for die in existing_dice:
@@ -30,6 +37,9 @@ class Dice(models.Model):
         else:
             for i in range(5):
                 Die.objects.create(hand=self, die_value=randint(1,6))
+
+        for coin in existing_coins:
+            Coin.objects.create(wallet=self, coin_value=coin.coin_value, coin_status=coin.coin_status)
 
 
     def score(self):
@@ -120,3 +130,12 @@ class Die(models.Model):
     class Meta:
         ordering = ('created_at',)
 
+class Coin(models.Model):
+    coin_value = models.IntegerField(default = 0)
+    coin_status = models.CharField(max_length=15, default="locked")
+    created_at = models.DateTimeField(auto_now_add=True)
+    wallet = models.ForeignKey(Dice, related_name='coin')
+
+
+    def __str__(self):
+        return '%s %s (%s)' % (self.coin_value, self.coin_status, self.wallet)
