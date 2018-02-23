@@ -12,9 +12,9 @@ View of the player interface:
 ![diamonddice](https://user-images.githubusercontent.com/25650135/36594941-937b3adc-18a0-11e8-8160-bb25084a380e.PNG)
 
 
-#### Technical Description 
+#### Technical Outline  
 The Dice are model objects that can take the value 'unlocked', 'locked' and 'scored'. Dice that haven't been rolled yet are 'unlocked', dice that have been played in a previous round are 'locked' and dice that have scored in the current round are 'scored'. 
 When the player clicks the 'save' and 'roll' buttons a GET request fetches new values from the game_action.py script. This script has multiple functions corresponding to the basic actions of the game which are:  
-roll_dice(): called when 'roll' is clicked. A random value is generated for all Dice that are 'unlocked'. 
-save_dice(): called when 'save' is clicked. Current Dice value is saved if sum of Dice value is more than 0. 
-reset_dice(): all Dice status is set to 'unlock' and the Dice value is set to 0.
+  * roll_dice(): called when 'roll' is clicked. A random value is generated for all Dice that are 'unlocked'. 
+  * save_dice(): called when 'save' is clicked. Current Dice value is saved if sum of Dice value is more than 0. 
+  * reset_dice(): all Dice status is set to 'unlock' and the Dice value is set to 0.
