@@ -6,5 +6,9 @@ DiamondDice is a personal twist on  a game called 'Dice 10,000' (also known as '
 
 #### Output 
 
+![diamonddice](https://user-images.githubusercontent.com/25650135/36594941-937b3adc-18a0-11e8-8160-bb25084a380e.PNG)
+
+
+
 #### Purpose 
 This is a  project to learn the building blocks of a web application with Django. When clicking the buttons the player makes a GET request. 
