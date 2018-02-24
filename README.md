@@ -13,7 +13,7 @@ View of the player interface:
 ![diamonddice](https://user-images.githubusercontent.com/25650135/36594941-937b3adc-18a0-11e8-8160-bb25084a380e.PNG)
 
 
-#### Technical Outline  
+#### Script Outline  
 The Dice are model objects that can take the value 'unlocked', 'locked' and 'scored'. Dice that haven't been rolled yet are 'unlocked', dice that have been played in a previous round are 'locked' and dice that have scored in the current round are 'scored'. 
 
 When the player clicks the 'save' and 'roll' buttons a GET request fetches new values from the game_action.py script. This script has multiple functions corresponding to the basic actions of the game which are:  
