@@ -3,7 +3,7 @@
 
 #### Overview 
 This is a learning project to get familiar with the building blocks of a web application in Django. 
-DiamondDice is a personal twist on  a game called 'Dice 10,000' (also known as 'Ten Grand' or  'Dix-Mille'), a popular dice games in some countries. The project is to build a solo player web version.
+DiamondDice is a personal twist on a game called 'Dice 10,000' (also known as 'Ten Grand' or  'Dix-Mille'), a popular dice games in some countries. The project is to build a solo player web version.
 This game is played with 5 dice: Dice can be rolled until one player reaches the score 10,000, hence the original name. The part about the Diamonds is not in the original rules. The player can roll the dice and accumulate points so long as there are coins remaining. Once the player has reached 10,000 points she gets one Gemstone. The game is played until the player has enough points to get a Diamond.  
 
 #### Output 
